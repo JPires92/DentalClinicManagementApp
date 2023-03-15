@@ -1,0 +1,64 @@
+﻿@model DentalClinicManagementApp.Models.Professional
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Professional</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfBirth" class="control-label"></label>
+                <input asp-for="DateOfBirth" class="form-control" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NIF" class="control-label"></label>
+                <input asp-for="NIF" class="form-control" />
+                <span asp-validation-for="NIF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PostalCodeID" class="control-label"></label>
+                <select asp-for="PostalCodeID" class="form-control" asp-items="ViewBag.PostalCodeID"></select>
+                <span asp-validation-for="PostalCodeID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProfessionalRoleID" class="control-label"></label>
+                <select asp-for="ProfessionalRoleID" class="form-control" asp-items="ViewBag.ProfessionalRoleID"></select>
+                <span asp-validation-for="ProfessionalRoleID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SpecialityID" class="control-label"></label>
+                <select asp-for="SpecialityID" class="form-control" asp-items="ViewBag.SpecialityID"></select>
+                <span asp-validation-for="SpecialityID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
