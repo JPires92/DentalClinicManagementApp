@@ -4,6 +4,7 @@ using DentalClinicManagementApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DentalClinicManagementApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230315201823_ClientsAndProfessionals_update")]
+    partial class ClientsAndProfessionals_update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,76 +59,6 @@ namespace DentalClinicManagementApp.Data.Migrations
                     b.HasIndex("PostalCodeID");
 
                     b.ToTable("Clients");
-                });
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.Invoice", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("ClientID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("FinalValue")
-                        .HasColumnType("money");
-
-                    b.Property<string>("InvoiceNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MedicalAppointmentID")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("State")
-                        .HasColumnType("bit");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ClientID");
-
-                    b.HasIndex("MedicalAppointmentID");
-
-                    b.ToTable("Invoices");
-                });
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.MedicalAppointment", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("ClientID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateOfAppointment")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Observations")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Performed")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ProfessionalID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ClientID");
-
-                    b.HasIndex("ProfessionalID");
-
-                    b.ToTable("MedicalAppointments");
                 });
 
             modelBuilder.Entity("DentalClinicManagementApp.Models.PostalCode", b =>
@@ -430,44 +363,6 @@ namespace DentalClinicManagementApp.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("PostalCode");
-                });
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.Invoice", b =>
-                {
-                    b.HasOne("DentalClinicManagementApp.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DentalClinicManagementApp.Models.MedicalAppointment", "MedicalAppointment")
-                        .WithMany()
-                        .HasForeignKey("MedicalAppointmentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("MedicalAppointment");
-                });
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.MedicalAppointment", b =>
-                {
-                    b.HasOne("DentalClinicManagementApp.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DentalClinicManagementApp.Models.Professional", "Professional")
-                        .WithMany()
-                        .HasForeignKey("ProfessionalID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Professional");
                 });
 
             modelBuilder.Entity("DentalClinicManagementApp.Models.Professional", b =>

@@ -4,6 +4,7 @@ using DentalClinicManagementApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DentalClinicManagementApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230315192623_ProfessionalRole_creation")]
+    partial class ProfessionalRole_creation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,169 +24,6 @@ namespace DentalClinicManagementApp.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.Client", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("HealthInsuranceCompany")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NIF")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PostalCodeID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("PostalCodeID");
-
-                    b.ToTable("Clients");
-                });
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.Invoice", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("ClientID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("FinalValue")
-                        .HasColumnType("money");
-
-                    b.Property<string>("InvoiceNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MedicalAppointmentID")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("State")
-                        .HasColumnType("bit");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ClientID");
-
-                    b.HasIndex("MedicalAppointmentID");
-
-                    b.ToTable("Invoices");
-                });
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.MedicalAppointment", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("ClientID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateOfAppointment")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Observations")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Performed")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ProfessionalID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ClientID");
-
-                    b.HasIndex("ProfessionalID");
-
-                    b.ToTable("MedicalAppointments");
-                });
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.PostalCode", b =>
-                {
-                    b.Property<string>("ZipCode")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ZipCode");
-
-                    b.ToTable("PostalCodes");
-                });
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.Professional", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("NIF")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PostalCodeID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ProfessionalRoleID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SpecialityID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("PostalCodeID");
-
-                    b.HasIndex("ProfessionalRoleID");
-
-                    b.HasIndex("SpecialityID");
-
-                    b.ToTable("Professionals");
-                });
 
             modelBuilder.Entity("DentalClinicManagementApp.Models.ProfessionalRole", b =>
                 {
@@ -200,23 +40,6 @@ namespace DentalClinicManagementApp.Data.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("ProfessionalRoles");
-                });
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.Speciality", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("SpecialityName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Specialities");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -419,80 +242,6 @@ namespace DentalClinicManagementApp.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.Client", b =>
-                {
-                    b.HasOne("DentalClinicManagementApp.Models.PostalCode", "PostalCode")
-                        .WithMany()
-                        .HasForeignKey("PostalCodeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PostalCode");
-                });
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.Invoice", b =>
-                {
-                    b.HasOne("DentalClinicManagementApp.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DentalClinicManagementApp.Models.MedicalAppointment", "MedicalAppointment")
-                        .WithMany()
-                        .HasForeignKey("MedicalAppointmentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("MedicalAppointment");
-                });
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.MedicalAppointment", b =>
-                {
-                    b.HasOne("DentalClinicManagementApp.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DentalClinicManagementApp.Models.Professional", "Professional")
-                        .WithMany()
-                        .HasForeignKey("ProfessionalID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Professional");
-                });
-
-            modelBuilder.Entity("DentalClinicManagementApp.Models.Professional", b =>
-                {
-                    b.HasOne("DentalClinicManagementApp.Models.PostalCode", "PostalCode")
-                        .WithMany()
-                        .HasForeignKey("PostalCodeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DentalClinicManagementApp.Models.ProfessionalRole", "ProfessionalRole")
-                        .WithMany()
-                        .HasForeignKey("ProfessionalRoleID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DentalClinicManagementApp.Models.Speciality", "Speciality")
-                        .WithMany()
-                        .HasForeignKey("SpecialityID");
-
-                    b.Navigation("PostalCode");
-
-                    b.Navigation("ProfessionalRole");
-
-                    b.Navigation("Speciality");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
