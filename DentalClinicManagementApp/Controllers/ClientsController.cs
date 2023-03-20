@@ -48,7 +48,7 @@ namespace DentalClinicManagementApp.Controllers
         // GET: Clients/Create
         public IActionResult Create()
         {
-            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes, "ZipCode", "ZipCode");
+            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes.Select(p => new { Id = p.ZipCode, Name = $"{p.ZipCode} {p.Location}" }), "Id", "Name");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace DentalClinicManagementApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes, "ZipCode", "ZipCode", client.PostalCodeID);
+            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes.Select(p => new { Id = p.ZipCode, Name = $"{p.ZipCode} {p.Location}" }), "Id", "Name", client.PostalCodeID);
             return View(client);
         }
 
@@ -82,7 +82,7 @@ namespace DentalClinicManagementApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes, "ZipCode", "ZipCode", client.PostalCodeID);
+            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes.Select(p => new { Id = p.ZipCode, Name = $"{p.ZipCode} {p.Location}" }), "Id", "Name", client.PostalCodeID);
             return View(client);
         }
 
@@ -118,7 +118,7 @@ namespace DentalClinicManagementApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes, "ZipCode", "ZipCode", client.PostalCodeID);
+            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes.Select(p => new { Id = p.ZipCode, Name = $"{p.ZipCode} {p.Location}" }), "Id", "Name", client.PostalCodeID);
             return View(client);
         }
 

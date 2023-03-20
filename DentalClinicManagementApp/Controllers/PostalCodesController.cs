@@ -60,9 +60,19 @@ namespace DentalClinicManagementApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(postalCode);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var _postalCode = await _context.PostalCodes.FindAsync(postalCode.ZipCode);
+
+                if (_postalCode == null)
+                {
+                    _context.Add(postalCode);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return View(postalCode);
+                }
+
             }
             return View(postalCode);
         }

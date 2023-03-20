@@ -10,7 +10,8 @@ namespace DentalClinicManagementApp.Models
         public string Name { get; set; } = "";
 
         [Display(Name = "Date of birth")]
-        public DateTime DateOfBirth { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime DateOfBirth { get; set; } = DateTime.Now;
 
         [Display(Name = "NIF")]
         public int NIF { get; set; }

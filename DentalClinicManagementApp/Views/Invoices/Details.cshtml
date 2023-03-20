@@ -34,17 +34,29 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.State)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Client.NIF)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Client.NIF)
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Client)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Client.ID)
+            @Html.DisplayFor(model => model.Client.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.MedicalAppointment)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.MedicalAppointment.ID)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MedicalAppointment.DateOfAppointment)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MedicalAppointment.DateOfAppointment)
         </dd>
     </dl>
 </div>

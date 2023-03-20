@@ -49,8 +49,9 @@ namespace DentalClinicManagementApp.Controllers
         // GET: Invoices/Create
         public IActionResult Create()
         {
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "ID");
-            ViewData["MedicalAppointmentID"] = new SelectList(_context.MedicalAppointments, "ID", "ID");
+            //ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name");
+            ViewData["MedicalAppointmentID"] = new SelectList(_context.MedicalAppointments.Select
+                                                (p => new { ID = p.ID, Name = $"Appointment: {p.ID}, Date: {p.DateOfAppointment}" }), "ID", "Name");
             return View();
         }
 
@@ -59,16 +60,20 @@ namespace DentalClinicManagementApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,InvoiceNumber,Description,FinalValue,State,ClientID,MedicalAppointmentID")] Invoice invoice)
+        public async Task<IActionResult> Create([Bind("ID,InvoiceNumber,Description,FinalValue,State,MedicalAppointmentID")] Invoice invoice)
         {
             if (ModelState.IsValid)
             {
+                MedicalAppointment aux = _context.MedicalAppointments.Find(invoice.MedicalAppointmentID)!;
+                invoice.ClientID = aux.ClientID;
+
                 _context.Add(invoice);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "ID", invoice.ClientID);
-            ViewData["MedicalAppointmentID"] = new SelectList(_context.MedicalAppointments, "ID", "ID", invoice.MedicalAppointmentID);
+            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name", invoice.ClientID);
+            ViewData["MedicalAppointmentID"] = new SelectList(_context.MedicalAppointments.Select
+                                                (p => new { ID = p.ID, Name = $"Appointment: {p.ID}, Date: {p.DateOfAppointment}" }), "ID", "Name", invoice.MedicalAppointmentID);
             return View(invoice);
         }
 
@@ -85,8 +90,9 @@ namespace DentalClinicManagementApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "ID", invoice.ClientID);
-            ViewData["MedicalAppointmentID"] = new SelectList(_context.MedicalAppointments, "ID", "ID", invoice.MedicalAppointmentID);
+            //ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name", invoice.ClientID);
+            ViewData["MedicalAppointmentID"] = new SelectList(_context.MedicalAppointments.Select
+                                               (p => new { ID = p.ID, Name = $"Appointment: {p.ID}, Date: {p.DateOfAppointment}" }), "ID", "Name", invoice.MedicalAppointmentID);
             return View(invoice);
         }
 
@@ -95,7 +101,7 @@ namespace DentalClinicManagementApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,InvoiceNumber,Description,FinalValue,State,ClientID,MedicalAppointmentID")] Invoice invoice)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,InvoiceNumber,Description,FinalValue,State,MedicalAppointmentID")] Invoice invoice)
         {
             if (id != invoice.ID)
             {
@@ -106,6 +112,9 @@ namespace DentalClinicManagementApp.Controllers
             {
                 try
                 {
+                    MedicalAppointment aux = _context.MedicalAppointments.Find(invoice.MedicalAppointmentID)!;
+                    invoice.ClientID = aux.ClientID;
+
                     _context.Update(invoice);
                     await _context.SaveChangesAsync();
                 }
@@ -122,8 +131,9 @@ namespace DentalClinicManagementApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "ID", invoice.ClientID);
-            ViewData["MedicalAppointmentID"] = new SelectList(_context.MedicalAppointments, "ID", "ID", invoice.MedicalAppointmentID);
+            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name", invoice.ClientID);
+            ViewData["MedicalAppointmentID"] = new SelectList(_context.MedicalAppointments.Select
+                                                (p => new { ID = p.ID, Name = $"Appointment: {p.ID}, Date: {p.DateOfAppointment}" }), "ID", "Name", invoice.MedicalAppointmentID);
             return View(invoice);
         }
 

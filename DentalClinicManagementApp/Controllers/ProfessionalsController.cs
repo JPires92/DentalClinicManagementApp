@@ -50,9 +50,14 @@ namespace DentalClinicManagementApp.Controllers
         // GET: Professionals/Create
         public IActionResult Create()
         {
-            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes, "ZipCode", "ZipCode");
-            ViewData["ProfessionalRoleID"] = new SelectList(_context.ProfessionalRoles, "ID", "ID");
-            ViewData["SpecialityID"] = new SelectList(_context.Specialities, "ID", "ID");
+            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes.Select(p => new { Id = p.ZipCode, Name = $"{p.ZipCode} {p.Location}"}), "Id", "Name");
+            ViewData["ProfessionalRoleID"] = new SelectList(_context.ProfessionalRoles, "ID", "RoleName");
+            
+            var specialities = _context.Specialities.ToList();
+            specialities.Insert(0, new Speciality { ID = 0, SpecialityName = "-- Select a speciality --" });
+            ViewData["SpecialityID"] = new SelectList(specialities, "ID", "SpecialityName");
+
+
             return View();
         }
 
@@ -65,13 +70,32 @@ namespace DentalClinicManagementApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(professional.SpecialityID == 0)
+                {
+                    professional.SpecialityID = null;
+                }
+
+                ProfessionalRole aux = _context.ProfessionalRoles.Find(professional.ProfessionalRoleID)!;
+                string _professionalRole = aux.RoleName.ToUpper();
+                if (!(_professionalRole.Equals("MEDICO") || _professionalRole.Equals("MÉDICO")))
+                {
+                    //Especialidade deve ser null
+                    professional.SpecialityID = null;
+                }
+
                 _context.Add(professional);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes, "ZipCode", "ZipCode", professional.PostalCodeID);
-            ViewData["ProfessionalRoleID"] = new SelectList(_context.ProfessionalRoles, "ID", "ID", professional.ProfessionalRoleID);
-            ViewData["SpecialityID"] = new SelectList(_context.Specialities, "ID", "ID", professional.SpecialityID);
+
+            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes.Select(p => new { Id = p.ZipCode, Name = $"{p.ZipCode} {p.Location}" }), "Id", "Name");
+            ViewData["ProfessionalRoleID"] = new SelectList(_context.ProfessionalRoles, "ID", "RoleName", professional.ProfessionalRoleID);
+
+            var specialities = _context.Specialities.ToList();
+            specialities.Insert(0, new Speciality { ID = 0, SpecialityName = "-- Select a speciality --" });
+            ViewData["SpecialityID"] = new SelectList(specialities, "ID", "SpecialityName", professional.SpecialityID);
+
+
             return View(professional);
         }
 
@@ -88,9 +112,14 @@ namespace DentalClinicManagementApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes, "ZipCode", "ZipCode", professional.PostalCodeID);
-            ViewData["ProfessionalRoleID"] = new SelectList(_context.ProfessionalRoles, "ID", "ID", professional.ProfessionalRoleID);
-            ViewData["SpecialityID"] = new SelectList(_context.Specialities, "ID", "ID", professional.SpecialityID);
+
+            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes.Select(p => new { Id = p.ZipCode, Name = $"{p.ZipCode} {p.Location}" }), "Id", "Name", professional.PostalCodeID);
+            ViewData["ProfessionalRoleID"] = new SelectList(_context.ProfessionalRoles, "ID", "RoleName", professional.ProfessionalRoleID);
+            
+            var specialities = _context.Specialities.ToList();
+            specialities.Insert(0, new Speciality { ID = 0, SpecialityName = "-- Select a speciality --" });
+            ViewData["SpecialityID"] = new SelectList(specialities, "ID", "SpecialityName", professional.SpecialityID is null? 0 : professional.SpecialityID);
+            
             return View(professional);
         }
 
@@ -106,10 +135,24 @@ namespace DentalClinicManagementApp.Controllers
                 return NotFound();
             }
 
+            if (professional.SpecialityID == 0)
+            {
+                professional.SpecialityID = null;
+            }
+
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    ProfessionalRole aux = _context.ProfessionalRoles.Find(professional.ProfessionalRoleID)!;
+                    string _professionalRole = aux.RoleName.ToUpper();
+                    if (!(_professionalRole.Equals("MEDICO") || _professionalRole.Equals("MÉDICO")))
+                    {
+                        //Especialidade deve ser null
+                        professional.SpecialityID = null;
+                    }
+
                     _context.Update(professional);
                     await _context.SaveChangesAsync();
                 }
@@ -126,9 +169,14 @@ namespace DentalClinicManagementApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes, "ZipCode", "ZipCode", professional.PostalCodeID);
-            ViewData["ProfessionalRoleID"] = new SelectList(_context.ProfessionalRoles, "ID", "ID", professional.ProfessionalRoleID);
-            ViewData["SpecialityID"] = new SelectList(_context.Specialities, "ID", "ID", professional.SpecialityID);
+
+            ViewData["PostalCodeID"] = new SelectList(_context.PostalCodes.Select(p => new { Id = p.ZipCode, Name = $"{p.ZipCode} {p.Location}" }), "Id", "Name", professional.PostalCodeID);
+            ViewData["ProfessionalRoleID"] = new SelectList(_context.ProfessionalRoles, "ID", "RoleName", professional.ProfessionalRoleID);
+            
+            var specialities = _context.Specialities.ToList();
+            specialities.Insert(0, new Speciality { ID = 0, SpecialityName = "-- Select a speciality --" });
+            ViewData["SpecialityID"] = new SelectList(specialities, "ID", "SpecialityName", professional.SpecialityID);
+            
             return View(professional);
         }
 

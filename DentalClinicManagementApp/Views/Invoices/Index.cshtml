@@ -22,13 +22,19 @@
                 @Html.DisplayNameFor(model => model.FinalValue)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.State)
+                @Html.DisplayNameFor(model => model.Client.NIF)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Client)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MedicalAppointment)
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th>
+                AppointmentID
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicalAppointment.DateOfAppointment)
             </th>
             <th></th>
         </tr>
@@ -46,13 +52,19 @@
                 @Html.DisplayFor(modelItem => item.FinalValue)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Client.NIF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.Name)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.State)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Client.ID)
+                @Html.DisplayFor(modelItem => item.MedicalAppointment.ID)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MedicalAppointment.ID)
+                @Html.DisplayFor(modelItem => item.MedicalAppointment.DateOfAppointment)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

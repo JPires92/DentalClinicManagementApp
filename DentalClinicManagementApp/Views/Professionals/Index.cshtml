@@ -25,13 +25,16 @@
                 @Html.DisplayNameFor(model => model.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PostalCode)
+                @Html.DisplayNameFor(model => model.PostalCode.ZipCode)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProfessionalRole)
+                @Html.DisplayNameFor(model => model.PostalCode.Location)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Speciality)
+                @Html.DisplayNameFor(model => model.ProfessionalRole.RoleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Speciality.SpecialityName)
             </th>
             <th></th>
         </tr>
@@ -55,10 +58,22 @@
                 @Html.DisplayFor(modelItem => item.PostalCode.ZipCode)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProfessionalRole.ID)
+                @Html.DisplayFor(modelItem => item.PostalCode.Location)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Speciality.ID)
+                @Html.DisplayFor(modelItem => item.ProfessionalRole.RoleName)
+            </td>
+            <td>
+                    @{
+                        if ( item.SpecialityID.HasValue)
+                        {
+                            @item.Speciality!.SpecialityName
+                        }
+                        else
+                        {
+                                <p>-</p>
+                        }
+                    }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

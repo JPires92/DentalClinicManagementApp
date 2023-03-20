@@ -1,18 +1,20 @@
 ﻿@model DentalClinicManagementApp.Models.PostalCode
 
 @{
+   
     ViewData["Title"] = "Edit";
 }
 
 <h1>Edit</h1>
 
 <h4>PostalCode</h4>
+<h6>@Model.ZipCode</h6>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ZipCode" />
+            <input type="hidden" name="ZipCode" value="@Model.ZipCode" />
             <div class="form-group">
                 <label asp-for="Location" class="control-label"></label>
                 <input asp-for="Location" class="form-control" />

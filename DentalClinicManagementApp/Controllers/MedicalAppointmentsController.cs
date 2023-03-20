@@ -49,8 +49,9 @@ namespace DentalClinicManagementApp.Controllers
         // GET: MedicalAppointments/Create
         public IActionResult Create()
         {
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "ID");
-            ViewData["ProfessionalID"] = new SelectList(_context.Professionals, "ID", "ID");
+            IEnumerable<Professional> aux = _context.Professionals.Where(c => c.ProfessionalRole.RoleName == "Médico").ToList();
+            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name");
+            ViewData["ProfessionalID"] = new SelectList(aux, "ID", "Name");
             return View();
         }
 
@@ -67,8 +68,10 @@ namespace DentalClinicManagementApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "ID", medicalAppointment.ClientID);
-            ViewData["ProfessionalID"] = new SelectList(_context.Professionals, "ID", "ID", medicalAppointment.ProfessionalID);
+
+            IEnumerable<Professional> aux = _context.Professionals.Where(c => c.ProfessionalRole.RoleName == "Médico").ToList();
+            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name", medicalAppointment.ClientID);
+            ViewData["ProfessionalID"] = new SelectList(aux, "ID", "Name", medicalAppointment.ProfessionalID);
             return View(medicalAppointment);
         }
 
@@ -85,8 +88,9 @@ namespace DentalClinicManagementApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "ID", medicalAppointment.ClientID);
-            ViewData["ProfessionalID"] = new SelectList(_context.Professionals, "ID", "ID", medicalAppointment.ProfessionalID);
+            IEnumerable<Professional> aux = _context.Professionals.Where(c => c.ProfessionalRole.RoleName == "Médico").ToList();
+            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name", medicalAppointment.ClientID);
+            ViewData["ProfessionalID"] = new SelectList(aux, "ID", "Name", medicalAppointment.ProfessionalID);
             return View(medicalAppointment);
         }
 
@@ -122,8 +126,9 @@ namespace DentalClinicManagementApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "ID", medicalAppointment.ClientID);
-            ViewData["ProfessionalID"] = new SelectList(_context.Professionals, "ID", "ID", medicalAppointment.ProfessionalID);
+            IEnumerable<Professional> aux = _context.Professionals.Where(c => c.ProfessionalRole.RoleName == "Médico").ToList();
+            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name", medicalAppointment.ClientID);
+            ViewData["ProfessionalID"] = new SelectList(aux, "ID", "Name", medicalAppointment.ProfessionalID);
             return View(medicalAppointment);
         }
 

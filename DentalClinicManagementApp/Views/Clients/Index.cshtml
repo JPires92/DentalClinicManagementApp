@@ -22,13 +22,16 @@
                 @Html.DisplayNameFor(model => model.NIF)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HealthInsuranceCompany)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PostalCode)
+                @Html.DisplayNameFor(model => model.PostalCode.ZipCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostalCode.Location)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HealthInsuranceCompany)
             </th>
             <th></th>
         </tr>
@@ -46,13 +49,16 @@
                 @Html.DisplayFor(modelItem => item.NIF)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HealthInsuranceCompany)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PostalCode.ZipCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostalCode.Location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HealthInsuranceCompany)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
