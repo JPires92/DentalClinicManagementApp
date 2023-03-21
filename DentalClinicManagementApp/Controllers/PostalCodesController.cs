@@ -7,16 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DentalClinicManagementApp.Data;
 using DentalClinicManagementApp.Models;
+using Microsoft.AspNetCore.Mvc.Localization;
+using NToastNotify;
 
 namespace DentalClinicManagementApp.Controllers
 {
     public class PostalCodesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IToastNotification _toastNotification;
+        private readonly IHtmlLocalizer<SharedResource> _sharedLocalizer;
 
-        public PostalCodesController(ApplicationDbContext context)
+        public PostalCodesController(ApplicationDbContext context, IToastNotification toastNotification,
+            IHtmlLocalizer<SharedResource> sharedLocalizer)
         {
             _context = context;
+            _toastNotification = toastNotification;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         // GET: PostalCodes
@@ -66,10 +73,19 @@ namespace DentalClinicManagementApp.Controllers
                 {
                     _context.Add(postalCode);
                     await _context.SaveChangesAsync();
+                    _toastNotification.AddSuccessToastMessage(
+                                   string.Format(_sharedLocalizer["Postcode added!"].Value, postalCode.ZipCode),
+                                   new ToastrOptions { Title = _sharedLocalizer["New Zip Code"].Value });
+
+
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
+                    _toastNotification.AddErrorToastMessage(
+                                   string.Format(_sharedLocalizer["Postcode already exists!"].Value, postalCode.ZipCode),
+                                   new ToastrOptions { Title = _sharedLocalizer["New Zip Code"].Value });
+
                     return View(postalCode);
                 }
 

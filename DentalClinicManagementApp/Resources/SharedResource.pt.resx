@@ -120,6 +120,12 @@
   <data name="Location" xml:space="preserve">
     <value>Localidade</value>
   </data>
+  <data name="Postcode added!" xml:space="preserve">
+    <value>Código postal &lt;b&gt;'{0}'&lt;/b&gt; adicionado!</value>
+  </data>
+  <data name="Postcode already exists!" xml:space="preserve">
+    <value>Código postal &lt;b&gt;'{0}'&lt;/b&gt; já existe!</value>
+  </data>
   <data name="Zip Code" xml:space="preserve">
     <value>Código Postal</value>
   </data>
