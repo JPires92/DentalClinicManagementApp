@@ -4,11 +4,11 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<h1>@SharedLocalizer["Delete"]</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>@SharedLocalizer["Are you sure you want to delete this?"]</h3>
 <div>
-    <h4>Invoice</h4>
+    <h4>@SharedLocalizer["Invoice"]</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -42,13 +42,13 @@
             @Html.DisplayFor(model => model.Client.NIF)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Client)
+            @Html.DisplayNameFor(model => model.ClientID)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Client.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MedicalAppointment)
+            @Html.DisplayNameFor(model => model.MedicalAppointmentID)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.MedicalAppointment.ID)
@@ -57,7 +57,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="@SharedLocalizer["Delete"]" class="btn btn-danger" /> |
+        <a asp-action="Index">@SharedLocalizer["Back to List"]</a>
     </form>
 </div>

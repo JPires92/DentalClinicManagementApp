@@ -16,7 +16,7 @@ namespace DentalClinicManagementApp.Models
         [Display(Name = "NIF")]
         public int NIF { get; set; }
 
-        [Display(Name = "Health Insurance Company ")]
+        [Display(Name = "Health Insurance Company")]
         public string? HealthInsuranceCompany { get; set; } = "";
 
         [Display(Name = "Address")]

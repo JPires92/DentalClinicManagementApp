@@ -4,10 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>@SharedLocalizer["Details"]</h1>
 
 <div>
-    <h4>Invoice</h4>
+    <h4>@SharedLocalizer["Invoice"]</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -47,7 +47,7 @@
             @Html.DisplayFor(model => model.Client.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MedicalAppointment)
+            @SharedLocalizer["AppID"]
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.MedicalAppointment.ID)

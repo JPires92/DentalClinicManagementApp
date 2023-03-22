@@ -117,8 +117,104 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Address" xml:space="preserve">
+    <value>Morada</value>
+  </data>
+  <data name="AppID" xml:space="preserve">
+    <value>Consulta nº</value>
+  </data>
+  <data name="Appointment" xml:space="preserve">
+    <value>Consulta</value>
+  </data>
+  <data name="AppointmentID" xml:space="preserve">
+    <value>Consulta nº</value>
+  </data>
+  <data name="Appointments" xml:space="preserve">
+    <value>Consultas</value>
+  </data>
+  <data name="Are you sure you want to delete this?" xml:space="preserve">
+    <value>Tem a certeza que pretende apagar este registo?</value>
+  </data>
+  <data name="Back to List" xml:space="preserve">
+    <value>Voltar à lista</value>
+  </data>
+  <data name="Client" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="Clients" xml:space="preserve">
+    <value>Clientes</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Criar</value>
+  </data>
+  <data name="Create New" xml:space="preserve">
+    <value>Criar Novo(a)</value>
+  </data>
+  <data name="Date of appointment" xml:space="preserve">
+    <value>Data da consulta</value>
+  </data>
+  <data name="Date of birth" xml:space="preserve">
+    <value>Data de nascimento</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Apagar</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Descrição</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Detalhes</value>
+  </data>
+  <data name="Doctor" xml:space="preserve">
+    <value>Médico</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="Final Value" xml:space="preserve">
+    <value>Valor final</value>
+  </data>
+  <data name="Health Insurance Company" xml:space="preserve">
+    <value>Seguradora</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Pág. Inicial</value>
+  </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>Fatura</value>
+  </data>
+  <data name="Invoice number" xml:space="preserve">
+    <value>Nº da fatura</value>
+  </data>
+  <data name="Invoices" xml:space="preserve">
+    <value>Faturas</value>
+  </data>
   <data name="Location" xml:space="preserve">
     <value>Localidade</value>
+  </data>
+  <data name="Medical Appointment" xml:space="preserve">
+    <value>Consulta</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="Observations" xml:space="preserve">
+    <value>Observações</value>
+  </data>
+  <data name="Paid?" xml:space="preserve">
+    <value>Paga?</value>
+  </data>
+  <data name="Performed" xml:space="preserve">
+    <value>Realizada</value>
+  </data>
+  <data name="Postal Codes" xml:space="preserve">
+    <value>Códigos Postais</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Código Postal</value>
   </data>
   <data name="Postcode added!" xml:space="preserve">
     <value>Código postal &lt;b&gt;'{0}'&lt;/b&gt; adicionado!</value>
@@ -126,7 +222,37 @@
   <data name="Postcode already exists!" xml:space="preserve">
     <value>Código postal &lt;b&gt;'{0}'&lt;/b&gt; já existe!</value>
   </data>
+  <data name="Privacy" xml:space="preserve">
+    <value>Privacidade</value>
+  </data>
+  <data name="Professional" xml:space="preserve">
+    <value>Profissional</value>
+  </data>
+  <data name="Professionals" xml:space="preserve">
+    <value>Profissionais</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Cargo</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Cargos</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="Specialities" xml:space="preserve">
+    <value>Especialidades</value>
+  </data>
+  <data name="Speciality" xml:space="preserve">
+    <value>Especialidade</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sim</value>
+  </data>
   <data name="Zip Code" xml:space="preserve">
+    <value>Código Postal</value>
+  </data>
+  <data name="ZipCode" xml:space="preserve">
     <value>Código Postal</value>
   </data>
 </root>

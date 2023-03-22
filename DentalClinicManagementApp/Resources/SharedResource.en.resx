@@ -117,10 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AppID" xml:space="preserve">
+    <value>Appointment ID</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Postal Code</value>
+  </data>
   <data name="Postcode added!" xml:space="preserve">
     <value>Postcode &lt;b&gt;'{0}'&lt;/b&gt; added!</value>
   </data>
   <data name="Postcode already exists!" xml:space="preserve">
     <value>Postcode &lt;b&gt;'{0}'&lt;/b&gt; already exists!</value>
+  </data>
+  <data name="ZipCode" xml:space="preserve">
+    <value>Zip Code</value>
   </data>
 </root>
