@@ -19,6 +19,33 @@ namespace DentalClinicManagementApp.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> InvoiceAmount()
+        {
+            var applicationDbContext = _context.Invoices.Include(i => i.Client).Include(i => i.MedicalAppointment);
+            //var faturacaoMensal = _context.Invoices
+            //        .GroupBy(f => new { f.Date.Year, f.Date.Month })
+            //        .Select(g => new {
+            //            Ano = g.Key.Year,
+            //            Mes = g.Key.Month,
+            //            Total = g.Sum(f => f.Amount)
+            //        })
+            //        .ToList();
+
+            //// Definir a data do mês desejado
+            //var date = new DateTime(2022, 02, 01);
+
+            //// Obter o primeiro dia do próximo mês
+            //var nextMonth = date.AddMonths(1);
+
+            //// Calcular a faturação mensal
+            //var _faturacaoMensal = _context.Invoices
+            //    .Where(f => f.Date >= date && f.Date < nextMonth)
+            //    .Sum(f => f.Amount);
+
+
+            return View(await applicationDbContext.ToListAsync());
+        }
+
         // GET: Invoices
         public async Task<IActionResult> Index()
         {

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DentalClinicManagementApp.Data;
 using DentalClinicManagementApp.Models;
+using DentalClinicManagementApp.Lib;
 
 namespace DentalClinicManagementApp.Controllers
 {
@@ -20,11 +21,57 @@ namespace DentalClinicManagementApp.Controllers
         }
 
         // GET: ProfessionalRoles
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string searchName, int? pageNumber)
         {
-              return _context.ProfessionalRoles != null ? 
-                          View(await _context.ProfessionalRoles.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.ProfessionalRoles'  is null.");
+
+              //return _context.ProfessionalRoles != null ? 
+              //            View(await _context.ProfessionalRoles.ToListAsync()) :
+              //            Problem("Entity set 'ApplicationDbContext.ProfessionalRoles'  is null.");
+
+            if (_context.ProfessionalRoles == null)
+            {
+                Problem("Entity set 'ApplicationDbContext.ProfessionalRoles'  is null.");
+            }
+
+
+            ViewData["SearchName"] = searchName;
+            ViewData["Sort"] = sort;
+            ViewData["pageNumber"] = pageNumber;
+
+            var itemsSql = from i in _context.ProfessionalRoles select i;
+
+
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                itemsSql = itemsSql.Where(i => i.RoleName.Contains(searchName));
+            }
+
+
+            switch (sort)
+            {
+                case "role_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.RoleName);
+                    break;
+                case "role_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.RoleName);
+                    break;
+            }
+
+            if (sort == "role_desc")
+            {
+                ViewData["RoleSort"] = "role_asc";
+            }
+            else
+            {
+                ViewData["RoleSort"] = "role_desc";
+            }
+
+
+            int pageSize = 2;
+
+            var items = await PaginatedList<ProfessionalRole>.CreateAsync(itemsSql, pageNumber ?? 1, pageSize);
+
+            return View(items);
         }
 
         // GET: ProfessionalRoles/Details/5

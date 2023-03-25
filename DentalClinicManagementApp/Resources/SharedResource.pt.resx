@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Actions" xml:space="preserve">
+    <value>Ações</value>
+  </data>
   <data name="Address" xml:space="preserve">
     <value>Morada</value>
   </data>
@@ -173,6 +176,9 @@
   </data>
   <data name="Final Value" xml:space="preserve">
     <value>Valor final</value>
+  </data>
+  <data name="Find by RoleName" xml:space="preserve">
+    <value>Pesquisar por Cargo</value>
   </data>
   <data name="Health Insurance Company" xml:space="preserve">
     <value>Seguradora</value>

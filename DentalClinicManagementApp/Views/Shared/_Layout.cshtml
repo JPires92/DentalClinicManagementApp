@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DentalClinicManagementApp.styles.css" asp-append-version="true" />
+    @* MVC-GRID*@
+    <link rel="stylesheet" href="~/lib/mvc-grid/css/mvc-grid.css" />
 </head>
 <body>
     <header>
@@ -70,6 +72,14 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    
+    @*Notifications*@
     @await Component.InvokeAsync("NToastNotify") @*ToastNotify*@
+
+    @* MVC-GRID*@
+    <script src="~/lib/mvc-grid/js/mvc-grid.js"></script>
+    <script>
+        document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+    </script>
 </body>
 </html>
