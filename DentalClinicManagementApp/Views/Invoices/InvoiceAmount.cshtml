@@ -1,0 +1,42 @@
+﻿@using System.Globalization;
+
+@{
+    ViewData["Title"] = "InvoiceAmount";
+}
+
+<h1>@SharedLocalizer["Mensal amount"]</h1>
+<br />
+<form asp-controller="Invoices" asp-action="InvoiceAmount">
+    <h4>@SharedLocalizer["Select the year"]:
+    <select name="ano" onchange="this.form.submit();">
+        @foreach (var ano in ViewBag.ListaAnos)
+        {
+            if (ano == ViewBag.Ano)
+            {
+                <option value="@ano" selected>@ano</option>
+            }else{
+                 <option value="@ano">@ano</option>
+            }
+        
+        }
+    </select></h4>
+</form>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@SharedLocalizer["Month"]</th>
+            <th>@SharedLocalizer["Value"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+                <tr>
+                    <td>@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(item.Key)</td>
+                    <td>@item.Value €</td>
+                </tr>
+        }
+    </tbody>
+</table>

@@ -12,7 +12,7 @@
 <h1>@SharedLocalizer["Invoices"]</h1>
 
 <p>
-    <a asp-action="InvoiceAmount">@SharedLocalizer["Mensal amount"]</a>&nbsp;&diams;&nbsp;<a asp-action="InvoiceAmount">@SharedLocalizer["Overdue amount"]</a>
+    <h5><b style="color:darkred">@SharedLocalizer["Overdue amount"]: </b>@ViewData["ValorReceber"]€ &nbsp;&diams;&nbsp;<a asp-action="InvoiceAmount">@SharedLocalizer["Mensal amount"]</a></h5>
 </p>
 <p>
     <h6 align="right"><a asp-action="Create" class="btn btn-dark">@SharedLocalizer["Create New"]</a></h6>
@@ -67,7 +67,15 @@
                     @Html.DisplayFor(modelItem => item.Client!.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.State)
+                    @if (item.State)
+                    {
+                        @SharedLocalizer["Yes"]
+                    }
+                    else
+                    {
+                        @SharedLocalizer["No"]
+                        
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FinalValue)

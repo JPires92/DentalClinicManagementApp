@@ -13,6 +13,7 @@
         <form asp-action="Create">
             <input type="hidden" name="ClientID" value="0" />
             <input type="hidden" name="InvoiceNumber" value="0" />
+            <input type="hidden" name="State" value="false" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
@@ -24,10 +25,10 @@
                 <input type="number" asp-for="FinalValue" class="form-control" />
                 <span asp-validation-for="FinalValue" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="State" /> @Html.DisplayNameFor(model => model.State)
-                </label>
+            <div class="form-group">
+                <label asp-for="PaymentDate" class="control-label"></label>
+                <input asp-for="PaymentDate" class="form-control" />
+                <span asp-validation-for="PaymentDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MedicalAppointmentID" class="control-label"></label>

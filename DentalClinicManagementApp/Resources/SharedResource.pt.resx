@@ -213,6 +213,12 @@
   <data name="Medical Appointment" xml:space="preserve">
     <value>Consulta</value>
   </data>
+  <data name="Mensal amount" xml:space="preserve">
+    <value>Total mensal</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Mês</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
   </data>
@@ -224,6 +230,9 @@
   </data>
   <data name="Observations" xml:space="preserve">
     <value>Observações</value>
+  </data>
+  <data name="Overdue amount" xml:space="preserve">
+    <value>Total a receber</value>
   </data>
   <data name="Paid?" xml:space="preserve">
     <value>Paga?</value>
@@ -273,11 +282,17 @@
   <data name="Search" xml:space="preserve">
     <value>Pesquisar</value>
   </data>
+  <data name="Select the year" xml:space="preserve">
+    <value>Selecione o ano</value>
+  </data>
   <data name="Specialities" xml:space="preserve">
     <value>Especialidades</value>
   </data>
   <data name="Speciality" xml:space="preserve">
     <value>Especialidade</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Valor</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Sim</value>

@@ -20,31 +20,35 @@ namespace DentalClinicManagementApp.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> InvoiceAmount()
+        public async Task<IActionResult> InvoiceAmount(int? ano)
         {
-            var applicationDbContext = _context.Invoices.Include(i => i.Client).Include(i => i.MedicalAppointment);
-            //var faturacaoMensal = _context.Invoices
-            //        .GroupBy(f => new { f.Date.Year, f.Date.Month })
-            //        .Select(g => new {
-            //            Ano = g.Key.Year,
-            //            Mes = g.Key.Month,
-            //            Total = g.Sum(f => f.Amount)
-            //        })
-            //        .ToList();
+             
 
-            //// Definir a data do mês desejado
-            //var date = new DateTime(2022, 02, 01);
+            ViewBag.Ano = ano;
 
-            //// Obter o primeiro dia do próximo mês
-            //var nextMonth = date.AddMonths(1);
+            //Lista de Anos
+            var anos = _context.Invoices.Where(f => f.PaymentDate != null)
+                      .Select(f => f.PaymentDate.Value.Year)
+                      .Distinct()
+                      .ToList();
+            ano = ano.HasValue ? ano : anos[0];
+            ViewData["ListaAnos"]= anos;
 
-            //// Calcular a faturação mensal
-            //var _faturacaoMensal = _context.Invoices
-            //    .Where(f => f.Date >= date && f.Date < nextMonth)
-            //    .Sum(f => f.Amount);
+            var valoresMensais = new Dictionary<int, decimal>();
+      
+            for (int mes = 1; mes <= 12; mes++)
+            {
+                var faturasPagas = _context.Invoices
+                    .Where(f => f.PaymentDate != null && f.PaymentDate.Value.Month == mes && f.PaymentDate.Value.Year == ano)
+                    .ToList();
 
+                decimal valorMensal = faturasPagas.Sum(f => f.FinalValue);
 
-            return View(await applicationDbContext.ToListAsync());
+                valoresMensais.Add(mes, decimal.Round(valorMensal,2));
+            }
+
+            return View("InvoiceAmount", valoresMensais);
+
         }
 
         // GET: Invoices
@@ -101,6 +105,11 @@ namespace DentalClinicManagementApp.Controllers
 
 
             }
+            Decimal valorTotalFaturasNaoPagas = _context.Invoices
+                                            .Where(f => f.State == false)
+                                            .Sum(f => f.FinalValue);
+
+            ViewData["ValorReceber"] = Decimal.Round(valorTotalFaturasNaoPagas,2);
 
             ViewData["NumberSort"] = (sort == "number_desc") ? "number_asc" : "number_desc";
             ViewData["ClientSort"] = (sort == "client_desc") ? "client_asc" : "client_desc";
@@ -156,16 +165,17 @@ namespace DentalClinicManagementApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Description,FinalValue,State,MedicalAppointmentID")] Invoice invoice)
+        public async Task<IActionResult> Create([Bind("ID,Description,FinalValue,State,PaymentDate,MedicalAppointmentID")] Invoice invoice)
         {
             if (ModelState.IsValid)
             {
                 MedicalAppointment aux = _context.MedicalAppointments.Find(invoice.MedicalAppointmentID)!;
                 invoice.ClientID = aux.ClientID;
-                invoice.PaymentDate = invoice.State ? DateTime.Now : null;
 
                 int maxID = _context.Invoices.Any() ? _context.Invoices.Max(e => e.ID) : 1;
                 invoice.InvoiceNumber = "FT00000"+ (maxID+1).ToString();
+                
+                invoice.State = invoice.PaymentDate.HasValue? true: false;
 
                 _context.Add(invoice);
                 await _context.SaveChangesAsync();
@@ -214,7 +224,7 @@ namespace DentalClinicManagementApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,InvoiceNumber,Description,FinalValue,State,MedicalAppointmentID")] Invoice invoice)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,InvoiceNumber,Description,FinalValue,State,PaymentDate,MedicalAppointmentID")] Invoice invoice)
         {
             if (id != invoice.ID)
             {
@@ -227,7 +237,8 @@ namespace DentalClinicManagementApp.Controllers
                 {
                     MedicalAppointment aux = _context.MedicalAppointments.Find(invoice.MedicalAppointmentID)!;
                     invoice.ClientID = aux.ClientID;
-                    invoice.PaymentDate = invoice.State ? DateTime.Now : null;
+
+                    invoice.State = invoice.PaymentDate.HasValue ? true : false;
 
                     _context.Update(invoice);
                     await _context.SaveChangesAsync();
