@@ -1,83 +1,123 @@
-﻿@model IEnumerable<DentalClinicManagementApp.Models.Invoice>
+﻿@using DentalClinicManagementApp.Lib;
+@model PaginatedList<DentalClinicManagementApp.Models.Invoice>
 
 @{
     ViewData["Title"] = "Index";
+
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    int pageNumber = Convert.ToInt32(ViewData["pageNumber"]);
 }
 
 <h1>@SharedLocalizer["Invoices"]</h1>
 
 <p>
-    <a asp-action="Create">@SharedLocalizer["Create New"]</a>&nbsp;&diams;&nbsp;<a asp-action="InvoiceAmount">@SharedLocalizer["Mensal amount"]</a>
+    <a asp-action="InvoiceAmount">@SharedLocalizer["Mensal amount"]</a>&nbsp;&diams;&nbsp;<a asp-action="InvoiceAmount">@SharedLocalizer["Overdue amount"]</a>
 </p>
+<p>
+    <h6 align="right"><a asp-action="Create" class="btn btn-dark">@SharedLocalizer["Create New"]</a></h6>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            @SharedLocalizer["Find by Number, Client or Date"]:
+            <input type="text" name="searchName" value="@ViewData["SearchName"]" />
+            <input type="submit" value="@SharedLocalizer["Search"]" class="btn btn-primary" /> |
+            <a asp-action="Index" class="btn btn-secondary">@SharedLocalizer["Return to Full List"]</a>
+        </p>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.InvoiceNumber)
+                <a asp-action="Index" asp-route-sort="@ViewData["NumberSort"]"
+                   asp-route-searchName="@ViewData["SearchName"]"> @Html.DisplayNameFor(model => model.First().InvoiceNumber)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                <a asp-action="Index" asp-route-sort="@ViewData["ClientSort"]"
+                   asp-route-searchName="@ViewData["SearchName"]"> @Html.DisplayNameFor(model => model.First().ClientID)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FinalValue)
+                <a asp-action="Index" asp-route-sort="@ViewData["StateSort"]"
+                   asp-route-searchName="@ViewData["SearchName"]"> @Html.DisplayNameFor(model => model.First().State)</a>
+            </th>
+            <th style="color:#0d6efd;">
+                @Html.DisplayNameFor(model => model.First().FinalValue)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Client.NIF)
+                <a asp-action="Index" asp-route-sort="@ViewData["DataSort"]"
+                   asp-route-searchName="@ViewData["SearchName"]"> @Html.DisplayNameFor(model => model.First().MedicalAppointment!.DateOfAppointment)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ClientID)
+                @SharedLocalizer["Actions"]
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.State)
-            </th>
-            <th>
-                @SharedLocalizer["AppointmentID"]
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MedicalAppointment.DateOfAppointment)
-            </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.InvoiceNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FinalValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Client.NIF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Client.Name)
-            </td>
-            <td>
-                    @if (item.State)
-                    {
-                        @SharedLocalizer["Yes"]
-
-                    }
-                    else
-                    {
-                        @SharedLocalizer["No"]
-                    }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MedicalAppointment.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MedicalAppointment.DateOfAppointment)
-            </td>
-            <td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InvoiceNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client!.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FinalValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MedicalAppointment!.DateOfAppointment)
+                </td>
+                <td>
                     <partial name="_CRUD_actions" model="item.ID" />
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item @prevDisabled">
+            <a asp-action="Index"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]"
+               class="page-link">@SharedLocalizer["Previous"]</a>
+        </li>
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            @if (i == Model.PageIndex)
+            {
+                                <li class="page-item active">
+                                    <a asp-action="Index" asp-route-pageNumber="@i" asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]" class="page-link">@i</a>
+                                </li>
+            }
+            else
+            {
+                                <li class="page-item">
+                                    <a asp-action="Index" asp-route-pageNumber="@i" asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]" class="page-link">@i</a>
+                                </li>
+            }
+
+        }
+
+        <li class="page-item @nextDisabled">
+            <a asp-action="Index"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]"
+               class="page-link">@SharedLocalizer["Next"]</a>
+        </li>
+    </ul>
+</nav>

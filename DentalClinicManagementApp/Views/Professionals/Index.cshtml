@@ -1,84 +1,122 @@
-﻿@model IEnumerable<DentalClinicManagementApp.Models.Professional>
+﻿@using DentalClinicManagementApp.Lib;
+@model PaginatedList<DentalClinicManagementApp.Models.Professional>
 
 @{
     ViewData["Title"] = "Index";
+
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    int pageNumber = Convert.ToInt32(ViewData["pageNumber"]);
 }
 
 <h1>@SharedLocalizer["Professionals"]</h1>
 
 <p>
-    <a asp-action="Create">@SharedLocalizer["Create New"]</a>
+    <h6 align="right"><a asp-action="Create" class="btn btn-dark">@SharedLocalizer["Create New"]</a></h6>
 </p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            @SharedLocalizer["Find by Name or Role"]:
+            <input type="text" name="searchName" value="@ViewData["SearchName"]" />
+            <input type="submit" value="@SharedLocalizer["Search"]" class="btn btn-primary" /> |
+            <a asp-action="Index" class="btn btn-secondary">@SharedLocalizer["Return to Full List"]</a>
+        </p>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <a asp-action="Index" asp-route-sort="@ViewData["NameSort"]"
+                   asp-route-searchName="@ViewData["SearchName"]"> @Html.DisplayNameFor(model => model.First().Name)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
+                <a asp-action="Index" asp-route-sort="@ViewData["BirthSort"]"
+                   asp-route-searchName="@ViewData["SearchName"]"> @Html.DisplayNameFor(model => model.First().DateOfBirth)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NIF)
+                <a asp-action="Index" asp-route-sort="@ViewData["RoleSort"]"
+                   asp-route-searchName="@ViewData["SearchName"]"> @Html.DisplayNameFor(model => model.First().ProfessionalRole!.RoleName)</a>
             </th>
+            <th style="color:#0d6efd;">
+                @Html.DisplayNameFor(model => model.First().Speciality.SpecialityName)
+            </th>
+
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                @SharedLocalizer["Actions"]
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PostalCode.ZipCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PostalCode.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProfessionalRole.RoleName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Speciality.SpecialityName)
-            </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NIF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PostalCode.ZipCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PostalCode.Location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProfessionalRole.RoleName)
-            </td>
-            <td>
-                    @{
-                        if ( item.SpecialityID.HasValue)
-                        {
-                            @item.Speciality!.SpecialityName
+        @foreach (var item in Model)
+        {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateOfBirth)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProfessionalRole.RoleName)
+                    </td>
+                    <td>
+                        @{
+                            if (item.SpecialityID.HasValue)
+                            {
+                                @item.Speciality!.SpecialityName
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
                         }
-                        else
-                        {
-                                <p>-</p>
-                        }
-                    }
-            </td>
-            <td>
-                    <partial name="_CRUD_actions" model="item.ID" />
-            </td>
-        </tr>
-}
+                    </td>
+                    <td>
+                        <partial name="_CRUD_actions" model="item.ID" />
+                    </td>
+                </tr>
+        }
     </tbody>
 </table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item @prevDisabled">
+            <a asp-action="Index"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]"
+               class="page-link">@SharedLocalizer["Previous"]</a>
+        </li>
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            @if (i == Model.PageIndex)
+            {
+                <li class="page-item active">
+                    <a asp-action="Index" asp-route-pageNumber="@i" asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]" class="page-link">@i</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a asp-action="Index" asp-route-pageNumber="@i" asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]" class="page-link">@i</a>
+                </li>
+            }
+
+        }
+
+        <li class="page-item @nextDisabled">
+            <a asp-action="Index"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]"
+               class="page-link">@SharedLocalizer["Next"]</a>
+        </li>
+    </ul>
+</nav>

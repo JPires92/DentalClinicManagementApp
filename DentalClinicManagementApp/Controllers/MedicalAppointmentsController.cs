@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DentalClinicManagementApp.Data;
 using DentalClinicManagementApp.Models;
+using DentalClinicManagementApp.Lib;
 
 namespace DentalClinicManagementApp.Controllers
 {
@@ -20,10 +21,78 @@ namespace DentalClinicManagementApp.Controllers
         }
 
         // GET: MedicalAppointments
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string searchName, int? pageNumber)
         {
-            var applicationDbContext = _context.MedicalAppointments.Include(m => m.Client).Include(m => m.Professional);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.MedicalAppointments.Include(m => m.Client).Include(m => m.Professional);
+            //return View(await applicationDbContext.ToListAsync());
+
+            if (_context.MedicalAppointments == null)
+            {
+                Problem("Entity set 'ApplicationDbContext.MedicalAppointments'  is null.");
+            }
+
+            ViewData["SearchName"] = searchName;
+            ViewData["Sort"] = sort;
+            ViewData["pageNumber"] = pageNumber;
+
+            var itemsSql = from i in _context.MedicalAppointments!.Include(m => m.Client).Include(m => m.Professional).OrderBy(x => x.ID) select i;
+
+
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                itemsSql = itemsSql.Where(i => i.ID.ToString().Contains(searchName) || 
+                                               i.Client!.Name.Contains(searchName) || i.Professional!.Name.Contains(searchName));
+            }
+
+
+            switch (sort)
+            {
+                case "number_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.ID);
+                    break;
+                case "number_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.ID);
+                    break;
+                case "data_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.DateOfAppointment);
+                    break;
+                case "data_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.DateOfAppointment);
+                    break;
+                case "perform_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.Performed);
+                    break;
+                case "perform_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.Performed);
+                    break;
+                case "client_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.Client!.Name);
+                    break;
+                case "client_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.Client!.Name);
+                    break;
+                case "doctor_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.Professional!.Name);
+                    break;
+                case "doctor_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.Professional!.Name);
+                    break;
+
+
+            }
+
+            ViewData["NumberSort"] = (sort == "number_desc") ? "number_asc" : "number_desc";
+            ViewData["DataSort"] = (sort == "data_desc") ? "data_asc" : "data_desc";
+            ViewData["PerformSort"] = (sort == "perform_desc") ? "perform_asc" : "perform_desc";
+            ViewData["ClientSort"] = (sort == "client_desc") ? "client_asc" : "client_desc";
+            ViewData["DoctorSort"] = (sort == "doctor_desc") ? "doctor_asc" : "doctor_desc";
+
+            int pageSize = 10;
+
+            var items = await PaginatedList<MedicalAppointment>.CreateAsync(itemsSql, pageNumber ?? 1, pageSize);
+
+            return View(items);
+
         }
 
         // GET: MedicalAppointments/Details/5

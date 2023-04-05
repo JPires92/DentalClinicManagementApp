@@ -1,33 +1,94 @@
-﻿@model IEnumerable<DentalClinicManagementApp.Models.Speciality>
+﻿@using DentalClinicManagementApp.Lib;
+@model PaginatedList<DentalClinicManagementApp.Models.Speciality>
 
 @{
     ViewData["Title"] = "Index";
+
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    int pageNumber = Convert.ToInt32(ViewData["pageNumber"]);
 }
 
 <h1>@SharedLocalizer["Specialities"]</h1>
 
 <p>
-    <a asp-action="Create">@SharedLocalizer["Create New"]</a>
+    <h6 align="right"><a asp-action="Create" class="btn btn-dark">@SharedLocalizer["Create New"]</a></h6>
 </p>
+
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            @SharedLocalizer["Find by Speciality"]:
+            <input type="text" name="searchName" value="@ViewData["SearchName"]" />
+            <input type="submit" value="@SharedLocalizer["Search"]" class="btn btn-primary" /> |
+            <a asp-action="Index" class="btn btn-secondary">@SharedLocalizer["Return to Full List"]</a>
+        </p>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.SpecialityName)
+                <a asp-action="Index" asp-route-sort="@ViewData["SpecialitySort"]"
+                   asp-route-searchName="@ViewData["SearchName"]"> @Html.DisplayNameFor(model => model.First().SpecialityName)</a>
             </th>
-            <th></th>
+            <th>
+                @SharedLocalizer["Actions"]
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SpecialityName)
-            </td>
-            <td>
-                 <partial name="_CRUD_actions" model="item.ID" />
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SpecialityName)
+                </td>
+                <td>
+                    <partial name="_CRUD_actions" model="item.ID" />
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item @prevDisabled">
+            <a asp-action="Index"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]"
+               class="page-link">@SharedLocalizer["Previous"]</a>
+        </li>
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            @if (i == Model.PageIndex)
+            {
+                <li class="page-item active">
+                    <a asp-action="Index" asp-route-pageNumber="@i" asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]" class="page-link">@i</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a asp-action="Index" asp-route-pageNumber="@i" asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]" class="page-link">@i</a>
+                </li>
+            }
+
+        }
+
+        <li class="page-item @nextDisabled">
+            <a asp-action="Index"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-searchName="@ViewData["SearchName"]"
+               asp-route-sort="@ViewData["Sort"]"
+               class="page-link">@SharedLocalizer["Next"]</a>
+        </li>
+    </ul>
+</nav>

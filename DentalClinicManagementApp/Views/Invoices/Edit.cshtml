@@ -16,9 +16,11 @@
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="InvoiceNumber" class="control-label"></label>
-                <input asp-for="InvoiceNumber" class="form-control" disabled />
+                <input asp-for="InvoiceNumber" class="form-control" disabled/>
                 <span asp-validation-for="InvoiceNumber" class="text-danger"></span>
+                <input type="hidden" asp-for="InvoiceNumber" />
             </div>
+
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />

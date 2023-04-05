@@ -9,6 +9,7 @@ using DentalClinicManagementApp.Data;
 using DentalClinicManagementApp.Models;
 using Microsoft.AspNetCore.Mvc.Localization;
 using NToastNotify;
+using DentalClinicManagementApp.Lib;
 
 namespace DentalClinicManagementApp.Controllers
 {
@@ -27,11 +28,62 @@ namespace DentalClinicManagementApp.Controllers
         }
 
         // GET: PostalCodes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string searchName, int? pageNumber)
         {
-              return _context.PostalCodes != null ? 
-                          View(await _context.PostalCodes.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.PostalCodes'  is null.");
+
+            if (_context.PostalCodes == null)
+            {
+                Problem("Entity set 'ApplicationDbContext.PostalCodes'  is null.");
+            }
+
+
+            ViewData["SearchName"] = searchName;
+            ViewData["Sort"] = sort;
+            ViewData["pageNumber"] = pageNumber;
+
+            var itemsSql = from i in _context.PostalCodes select i;
+
+
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                itemsSql = itemsSql.Where(i => i.Location.Contains(searchName) || i.ZipCode.Contains(searchName));
+            }
+
+
+            switch (sort)
+            {
+                case "zipcode_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.ZipCode);
+                    break;
+                case "zipcode_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.ZipCode);
+                    break;
+
+                case "location_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.Location);
+                    break;
+                case "location_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.Location);
+                    break;
+            }
+
+            if (sort == "zipcode_desc")
+                ViewData["ZipCodeSort"] = "zipcode_asc";
+            else
+                ViewData["ZipCodeSort"] = "zipcode_desc";
+
+
+            if (sort == "location_desc")
+                ViewData["LocationSort"] = "location_asc";
+            else
+                ViewData["LocationSort"] = "location_desc";
+
+
+            int pageSize = 10;
+
+            var items = await PaginatedList<PostalCode>.CreateAsync(itemsSql, pageNumber ?? 1, pageSize);
+
+            return View(items);
         }
 
         // GET: PostalCodes/Details/5

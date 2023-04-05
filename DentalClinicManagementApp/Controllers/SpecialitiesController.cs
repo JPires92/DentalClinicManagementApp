@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DentalClinicManagementApp.Data;
 using DentalClinicManagementApp.Models;
+using DentalClinicManagementApp.Lib;
 
 namespace DentalClinicManagementApp.Controllers
 {
@@ -20,11 +21,49 @@ namespace DentalClinicManagementApp.Controllers
         }
 
         // GET: Specialities
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string searchName, int? pageNumber)
         {
-              return _context.Specialities != null ? 
-                          View(await _context.Specialities.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Specialities'  is null.");
+
+            if (_context.Specialities == null)
+            {
+                Problem("Entity set 'ApplicationDbContext.Specialities'  is null.");
+            }
+
+
+            ViewData["SearchName"] = searchName;
+            ViewData["Sort"] = sort;
+            ViewData["pageNumber"] = pageNumber;
+
+            var itemsSql = from i in _context.Specialities select i;
+
+
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                itemsSql = itemsSql.Where(i => i.SpecialityName.Contains(searchName));
+            }
+
+
+            switch (sort)
+            {
+                case "speciality_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.SpecialityName);
+                    break;
+                case "speciality_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.SpecialityName);
+                    break;
+            }
+
+            if (sort == "speciality_desc")
+                ViewData["SpecialitySort"] = "speciality_asc";
+            else
+                ViewData["SpecialitySort"] = "speciality_desc";
+
+
+            int pageSize = 10;
+
+            var items = await PaginatedList<Speciality>.CreateAsync(itemsSql, pageNumber ?? 1, pageSize);
+
+            return View(items);
         }
 
         // GET: Specialities/Details/5

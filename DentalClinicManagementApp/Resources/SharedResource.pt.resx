@@ -151,7 +151,7 @@
     <value>Criar</value>
   </data>
   <data name="Create New" xml:space="preserve">
-    <value>Criar Novo(a)</value>
+    <value>Criar novo(a)</value>
   </data>
   <data name="Date of appointment" xml:space="preserve">
     <value>Data da consulta</value>
@@ -177,8 +177,20 @@
   <data name="Final Value" xml:space="preserve">
     <value>Valor final</value>
   </data>
+  <data name="Find by Name or Role" xml:space="preserve">
+    <value>Pesquisar por Nome ou Cargo</value>
+  </data>
+  <data name="Find by Number, Client or Date" xml:space="preserve">
+    <value>Pesquisar por nº de fatura, cliente ou data</value>
+  </data>
+  <data name="Find by Number, Client or Doctor" xml:space="preserve">
+    <value>Pesquisar por nº de consulta, cliente ou médico</value>
+  </data>
   <data name="Find by RoleName" xml:space="preserve">
     <value>Pesquisar por Cargo</value>
+  </data>
+  <data name="Find by ZipCode or Location" xml:space="preserve">
+    <value>Pesquisar por CP ou Localidade</value>
   </data>
   <data name="Health Insurance Company" xml:space="preserve">
     <value>Seguradora</value>
@@ -204,6 +216,9 @@
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
   </data>
+  <data name="Next" xml:space="preserve">
+    <value>Seguinte</value>
+  </data>
   <data name="No" xml:space="preserve">
     <value>Não</value>
   </data>
@@ -228,6 +243,9 @@
   <data name="Postcode already exists!" xml:space="preserve">
     <value>Código postal &lt;b&gt;'{0}'&lt;/b&gt; já existe!</value>
   </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Anterior</value>
+  </data>
   <data name="Privacy" xml:space="preserve">
     <value>Privacidade</value>
   </data>
@@ -237,6 +255,9 @@
   <data name="Professionals" xml:space="preserve">
     <value>Profissionais</value>
   </data>
+  <data name="Return to Full List" xml:space="preserve">
+    <value>Ver lista completa</value>
+  </data>
   <data name="Role" xml:space="preserve">
     <value>Cargo</value>
   </data>
@@ -245,6 +266,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Guardar</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Pesquisar</value>
   </data>
   <data name="Specialities" xml:space="preserve">
     <value>Especialidades</value>

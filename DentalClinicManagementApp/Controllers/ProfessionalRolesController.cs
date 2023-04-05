@@ -67,7 +67,7 @@ namespace DentalClinicManagementApp.Controllers
             }
 
 
-            int pageSize = 2;
+            int pageSize = 5;
 
             var items = await PaginatedList<ProfessionalRole>.CreateAsync(itemsSql, pageNumber ?? 1, pageSize);
 

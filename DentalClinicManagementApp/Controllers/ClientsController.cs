@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DentalClinicManagementApp.Data;
 using DentalClinicManagementApp.Models;
+using DentalClinicManagementApp.Lib;
 
 namespace DentalClinicManagementApp.Controllers
 {
@@ -20,10 +21,71 @@ namespace DentalClinicManagementApp.Controllers
         }
 
         // GET: Clients
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string searchName, int? pageNumber)
         {
-            var applicationDbContext = _context.Clients.Include(c => c.PostalCode);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.Clients.Include(c => c.PostalCode);
+            //return View(await applicationDbContext.ToListAsync());
+
+
+            if (_context.Clients == null)
+            {
+                Problem("Entity set 'ApplicationDbContext.Clients'  is null.");
+            }
+
+            ViewData["SearchName"] = searchName;
+            ViewData["Sort"] = sort;
+            ViewData["pageNumber"] = pageNumber;
+
+            var itemsSql = from i in _context.Clients!.Include(p => p.PostalCode).OrderBy(x => x.Name) select i;
+
+
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                itemsSql = itemsSql.Where(i => i.Name.Contains(searchName) || i.NIF.ToString().Contains(searchName));
+            }
+
+
+            switch (sort)
+            {
+                case "name_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.Name);
+                    break;
+                case "name_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.Name);
+                    break;
+                case "birth_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.DateOfBirth);
+                    break;
+                case "birth_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.DateOfBirth);
+                    break;
+                case "nif_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.NIF);
+                    break;
+                case "nif_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.NIF);
+                    break;
+                case "health_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.HealthInsuranceCompany);
+                    break;
+                case "health_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.HealthInsuranceCompany);
+                    break;
+
+
+            }
+
+            ViewData["NameSort"] = (sort == "name_desc") ? "name_asc" : "name_desc";
+            ViewData["BirthSort"] = (sort == "birth_desc") ? "birth_asc" : "birth_desc";
+            ViewData["NIFSort"] = (sort == "nif_desc") ? "nif_asc" : "nif_desc";
+            ViewData["HealthSort"] = (sort == "health_desc") ? "health_asc" : "health_desc";
+
+
+            int pageSize = 10;
+
+            var items = await PaginatedList<Client>.CreateAsync(itemsSql, pageNumber ?? 1, pageSize);
+
+            return View(items);
         }
 
         // GET: Clients/Details/5

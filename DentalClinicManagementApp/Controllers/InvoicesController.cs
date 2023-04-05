@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DentalClinicManagementApp.Data;
 using DentalClinicManagementApp.Models;
+using DentalClinicManagementApp.Lib;
 
 namespace DentalClinicManagementApp.Controllers
 {
@@ -47,10 +48,71 @@ namespace DentalClinicManagementApp.Controllers
         }
 
         // GET: Invoices
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string searchName, int? pageNumber)
         {
-            var applicationDbContext = _context.Invoices.Include(i => i.Client).Include(i => i.MedicalAppointment);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.Invoices.Include(i => i.Client).Include(i => i.MedicalAppointment);
+            //return View(await applicationDbContext.ToListAsync());
+
+            if (_context.Invoices == null)
+            {
+                Problem("Entity set 'ApplicationDbContext.Invoices'  is null.");
+            }
+
+            ViewData["SearchName"] = searchName;
+            ViewData["Sort"] = sort;
+            ViewData["pageNumber"] = pageNumber;
+
+            var itemsSql = from i in _context.Invoices!.Include(i => i.Client).Include(m => m.MedicalAppointment).OrderBy(x => x.InvoiceNumber) select i;
+
+
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                itemsSql = itemsSql.Where(i => i.InvoiceNumber.Contains(searchName) || i.Client!.Name.Contains(searchName) 
+                || i.MedicalAppointment!.DateOfAppointment.ToString().Contains(searchName));
+            }
+
+
+            switch (sort)
+            {
+                case "number_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.InvoiceNumber);
+                    break;
+                case "number_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.InvoiceNumber);
+                    break;
+                case "client_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.Client!.Name);
+                    break;
+                case "client_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.Client!.Name);
+                    break;
+                case "state_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.State);
+                    break;
+                case "state_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.State);
+                    break;
+                case "data_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.MedicalAppointment!.DateOfAppointment);
+                    break;
+                case "data_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.MedicalAppointment!.DateOfAppointment);
+                    break;
+
+
+            }
+
+            ViewData["NumberSort"] = (sort == "number_desc") ? "number_asc" : "number_desc";
+            ViewData["ClientSort"] = (sort == "client_desc") ? "client_asc" : "client_desc";
+            ViewData["StateSort"] = (sort == "state_desc") ? "state_asc" : "state_desc";
+            ViewData["DataSort"] = (sort == "data_desc") ? "data_asc" : "data_desc";
+
+            int pageSize = 10;
+
+            var items = await PaginatedList<Invoice>.CreateAsync(itemsSql, pageNumber ?? 1, pageSize);
+
+            return View(items);
+
         }
 
         // GET: Invoices/Details/5
@@ -79,11 +141,12 @@ namespace DentalClinicManagementApp.Controllers
            
             var consultasNaoPagas = _context.MedicalAppointments
                 .GroupJoin(_context.Invoices, a => a.ID, f => f.MedicalAppointmentID, (a, f) => new { Appointment = a, Invoice = f.FirstOrDefault() })
-                .Where(c => c.Invoice == null || !c.Invoice.State)
-                .Select(c => new {ID = c.Appointment.ID, Name = $"ID: {c.Appointment.ID}, Date: {c.Appointment.DateOfAppointment}" })
+                .Where(c => !c.Invoice!.State && c.Appointment.Performed)
+                .Select(c => new {ID = c.Appointment.ID, Name = $"Nº: {c.Appointment.ID}, Date: {c.Appointment.DateOfAppointment}" })
                 .ToList();
 
-            ViewData["MedicalAppointmentID"] = new SelectList(consultasNaoPagas, "ID", "Name");
+            //ViewData["MedicalAppointmentID"] = new SelectList(consultasNaoPagas, "ID", "Name");
+            ViewData["MedicalAppointmentID"] = consultasNaoPagas.Count != 0 ? new SelectList(consultasNaoPagas, "ID", "Name") : new SelectList(Enumerable.Empty<SelectListItem>());
 
             return View();
         }
@@ -107,16 +170,15 @@ namespace DentalClinicManagementApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name", invoice.ClientID);
-            //ViewData["MedicalAppointmentID"] = new SelectList(_context.MedicalAppointments.Select
-            //                                    (p => new { ID = p.ID, Name = $"Appointment: {p.ID}, Date: {p.DateOfAppointment}" }), "ID", "Name", invoice.MedicalAppointmentID);
+         
             var consultasNaoPagas = _context.MedicalAppointments
               .GroupJoin(_context.Invoices, a => a.ID, f => f.MedicalAppointmentID, (a, f) => new { Appointment = a, Invoice = f.FirstOrDefault() })
-              .Where(c => c.Invoice == null || !c.Invoice.State)
-              .Select(c => new { ID = c.Appointment.ID, Name = $"ID: {c.Appointment.ID}, Date: {c.Appointment.DateOfAppointment}" })
+              .Where(c => !c.Invoice!.State && c.Appointment.Performed)
+              .Select(c => new { ID = c.Appointment.ID, Name = $"Nº: {c.Appointment.ID}, Date: {c.Appointment.DateOfAppointment}" })
               .ToList();
 
-            ViewData["MedicalAppointmentID"] = new SelectList(consultasNaoPagas, "ID", "Name", invoice.MedicalAppointmentID);
+            ViewData["MedicalAppointmentID"] = consultasNaoPagas.Count != 0 ? new SelectList(consultasNaoPagas, "ID", "Name", invoice.MedicalAppointmentID) : new SelectList(Enumerable.Empty<SelectListItem>());
+
 
             return View(invoice);
         }
@@ -134,9 +196,15 @@ namespace DentalClinicManagementApp.Controllers
             {
                 return NotFound();
             }
-            //ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name", invoice.ClientID);
-            ViewData["MedicalAppointmentID"] = new SelectList(_context.MedicalAppointments.Select
-                                               (p => new { ID = p.ID, Name = $"ID: {p.ID}, Date: {p.DateOfAppointment}" }), "ID", "Name", invoice.MedicalAppointmentID);
+
+            var consultasNaoPagas = _context.MedicalAppointments
+                .GroupJoin(_context.Invoices, a => a.ID, f => f.MedicalAppointmentID, (a, f) => new { Appointment = a, Invoice = f.FirstOrDefault() })
+                .Where(c => c.Appointment.Performed)
+                .Select(c => new { ID = c.Appointment.ID, Name = $"Nº: {c.Appointment.ID}, Date: {c.Appointment.DateOfAppointment}" })
+                .ToList();
+            //ViewData["MedicalAppointmentID"] = new SelectList(consultasNaoPagas, "ID", "Name", invoice.MedicalAppointmentID);
+            ViewData["MedicalAppointmentID"] = consultasNaoPagas.Count != 0 ? new SelectList(consultasNaoPagas, "ID", "Name", invoice.MedicalAppointmentID) : new SelectList(Enumerable.Empty<SelectListItem>());
+
             return View(invoice);
         }
 
@@ -175,9 +243,16 @@ namespace DentalClinicManagementApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientID"] = new SelectList(_context.Clients, "ID", "Name", invoice.ClientID);
-            ViewData["MedicalAppointmentID"] = new SelectList(_context.MedicalAppointments.Select
-                                                (p => new { ID = p.ID, Name = $"ID: {p.ID}, Date: {p.DateOfAppointment}" }), "ID", "Name", invoice.MedicalAppointmentID);
+            
+            var consultasNaoPagas = _context.MedicalAppointments
+                .GroupJoin(_context.Invoices, a => a.ID, f => f.MedicalAppointmentID, (a, f) => new { Appointment = a, Invoice = f.FirstOrDefault() })
+                .Where(c => c.Appointment.Performed)
+                .Select(c => new { ID = c.Appointment.ID, Name = $"Nº: {c.Appointment.ID}, Date: {c.Appointment.DateOfAppointment}" })
+                .ToList();
+
+            //ViewData["MedicalAppointmentID"] = new SelectList(consultasNaoPagas, "ID", "Name", invoice.MedicalAppointmentID);
+
+
             return View(invoice);
         }
 

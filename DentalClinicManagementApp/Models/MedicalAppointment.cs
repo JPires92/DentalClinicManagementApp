@@ -4,6 +4,7 @@ namespace DentalClinicManagementApp.Models
 {
     public class MedicalAppointment
     {
+        [Display(Name = "Nº")]
         public int ID { get; set; }
 
         [Display(Name = "Date of appointment")]

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DentalClinicManagementApp.Data;
 using DentalClinicManagementApp.Models;
+using DentalClinicManagementApp.Lib;
 
 namespace DentalClinicManagementApp.Controllers
 {
@@ -20,10 +21,62 @@ namespace DentalClinicManagementApp.Controllers
         }
 
         // GET: Professionals
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string searchName, int? pageNumber)
         {
-            var applicationDbContext = _context.Professionals.Include(p => p.PostalCode).Include(p => p.ProfessionalRole).Include(p => p.Speciality);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.Professionals.Include(p => p.PostalCode).Include(p => p.ProfessionalRole).Include(p => p.Speciality);
+            //return View(await applicationDbContext.ToListAsync());
+
+            if (_context.Professionals == null)
+            {
+                Problem("Entity set 'ApplicationDbContext.Specialities'  is null.");
+            }
+
+            ViewData["SearchName"] = searchName;
+            ViewData["Sort"] = sort;
+            ViewData["pageNumber"] = pageNumber;
+
+            var itemsSql = from i in _context.Professionals!.Include(p => p.PostalCode).Include(p => p.ProfessionalRole).Include(p => p.Speciality).OrderBy(x => x.Name) select i;
+
+
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                itemsSql = itemsSql.Where(i => i.Name.Contains(searchName) || i.ProfessionalRole!.RoleName.Contains(searchName));
+            }
+
+
+            switch (sort)
+            {
+                case "name_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.Name);
+                    break;
+                case "name_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.Name);
+                    break;
+                case "birth_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.DateOfBirth);
+                    break;
+                case "birth_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.DateOfBirth);
+                    break;
+                case "role_desc":
+                    itemsSql = itemsSql.OrderByDescending(x => x.ProfessionalRole!.RoleName);
+                    break;
+                case "role_asc":
+                    itemsSql = itemsSql.OrderBy(x => x.ProfessionalRole!.RoleName);
+                    break;
+
+            }
+
+            ViewData["NameSort"] = (sort == "name_desc") ? "name_asc" : "name_desc";
+            ViewData["BirthSort"] = (sort == "birth_desc") ? "birth_asc" : "birth_desc";
+            ViewData["RoleSort"] = (sort == "role_desc") ? "role_asc" : "role_desc";
+
+            int pageSize = 10;
+
+            var items = await PaginatedList<Professional>.CreateAsync(itemsSql, pageNumber ?? 1, pageSize);
+
+            return View(items);
+
         }
 
         // GET: Professionals/Details/5
