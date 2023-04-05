@@ -49,7 +49,7 @@
             </th>
             <th>
                 <a asp-action="Index" asp-route-sort="@ViewData["DataSort"]"
-                   asp-route-searchName="@ViewData["SearchName"]"> @Html.DisplayNameFor(model => model.First().MedicalAppointment!.DateOfAppointment)</a>
+                   asp-route-searchName="@ViewData["SearchName"]"> @Html.DisplayNameFor(model => model.First().PaymentDate)</a>
             </th>
             <th>
                 @SharedLocalizer["Actions"]
@@ -73,7 +73,7 @@
                     @Html.DisplayFor(modelItem => item.FinalValue)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.MedicalAppointment!.DateOfAppointment)
+                    @Html.DisplayFor(modelItem => item.PaymentDate)
                 </td>
                 <td>
                     <partial name="_CRUD_actions" model="item.ID" />

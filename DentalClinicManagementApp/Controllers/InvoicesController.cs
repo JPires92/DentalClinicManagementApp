@@ -68,7 +68,7 @@ namespace DentalClinicManagementApp.Controllers
             if (!string.IsNullOrEmpty(searchName))
             {
                 itemsSql = itemsSql.Where(i => i.InvoiceNumber.Contains(searchName) || i.Client!.Name.Contains(searchName) 
-                || i.MedicalAppointment!.DateOfAppointment.ToString().Contains(searchName));
+                || i.PaymentDate.ToString().Contains(searchName));
             }
 
 
@@ -93,10 +93,10 @@ namespace DentalClinicManagementApp.Controllers
                     itemsSql = itemsSql.OrderBy(x => x.State);
                     break;
                 case "data_desc":
-                    itemsSql = itemsSql.OrderByDescending(x => x.MedicalAppointment!.DateOfAppointment);
+                    itemsSql = itemsSql.OrderByDescending(x => x.PaymentDate);
                     break;
                 case "data_asc":
-                    itemsSql = itemsSql.OrderBy(x => x.MedicalAppointment!.DateOfAppointment);
+                    itemsSql = itemsSql.OrderBy(x => x.PaymentDate);
                     break;
 
 
@@ -162,6 +162,7 @@ namespace DentalClinicManagementApp.Controllers
             {
                 MedicalAppointment aux = _context.MedicalAppointments.Find(invoice.MedicalAppointmentID)!;
                 invoice.ClientID = aux.ClientID;
+                invoice.PaymentDate = invoice.State ? DateTime.Now : null;
 
                 int maxID = _context.Invoices.Any() ? _context.Invoices.Max(e => e.ID) : 1;
                 invoice.InvoiceNumber = "FT00000"+ (maxID+1).ToString();
@@ -226,6 +227,7 @@ namespace DentalClinicManagementApp.Controllers
                 {
                     MedicalAppointment aux = _context.MedicalAppointments.Find(invoice.MedicalAppointmentID)!;
                     invoice.ClientID = aux.ClientID;
+                    invoice.PaymentDate = invoice.State ? DateTime.Now : null;
 
                     _context.Update(invoice);
                     await _context.SaveChangesAsync();

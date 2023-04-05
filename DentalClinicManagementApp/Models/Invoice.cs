@@ -21,6 +21,9 @@ namespace DentalClinicManagementApp.Models
         [Display(Name = "Paid?")]
         public bool State { get; set; }
 
+        [Display(Name = "Payment date")]
+        public DateTime? PaymentDate { get; set; }
+
         /*FK*/
         [Display(Name = "Client")]
         public int ClientID { get; set; }

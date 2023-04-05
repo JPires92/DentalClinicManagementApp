@@ -228,6 +228,9 @@
   <data name="Paid?" xml:space="preserve">
     <value>Paga?</value>
   </data>
+  <data name="Payment date" xml:space="preserve">
+    <value>Data de pagamento</value>
+  </data>
   <data name="Performed" xml:space="preserve">
     <value>Realizada</value>
   </data>
