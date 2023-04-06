@@ -192,8 +192,14 @@
   <data name="Find by ZipCode or Location" xml:space="preserve">
     <value>Pesquisar por CP ou Localidade</value>
   </data>
+  <data name="Future medical appointments" xml:space="preserve">
+    <value>Consultas futuras</value>
+  </data>
   <data name="Health Insurance Company" xml:space="preserve">
     <value>Seguradora</value>
+  </data>
+  <data name="History of medical appointments" xml:space="preserve">
+    <value>Histórico de consultas</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Pág. Inicial</value>

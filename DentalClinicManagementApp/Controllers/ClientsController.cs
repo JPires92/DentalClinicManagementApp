@@ -20,6 +20,38 @@ namespace DentalClinicManagementApp.Controllers
             _context = context;
         }
 
+        [HttpGet("HitoryAppointmentsClient")]
+        public async Task<IActionResult> HitoryAppointmentsClient(int id, int? pageNumber)
+        {
+            ViewData["pageNumber"] = pageNumber;
+            ViewData["ID"] = id;
+
+            var itemsSql = from i in _context.MedicalAppointments!.Include(m => m.Client).Include(m => m.Professional).OrderBy(x => x.DateOfAppointment) select i;
+            itemsSql = itemsSql.Where(i => i.ClientID == id && i.DateOfAppointment < DateTime.Now);
+
+            int pageSize = 10;
+            var items = await PaginatedList<MedicalAppointment>.CreateAsync(itemsSql, pageNumber ?? 1, pageSize);
+
+            return View(items);
+        }
+
+        [HttpGet("FutureAppointmentsClient")]
+        public async Task<IActionResult> FutureAppointmentsClient(int id, int? pageNumber)
+        {
+            ViewData["pageNumber"] = pageNumber;
+            ViewData["ID"] = id;
+
+            var itemsSql = from i in _context.MedicalAppointments!.Include(m => m.Client).Include(m => m.Professional).OrderBy(x => x.DateOfAppointment) select i;
+            itemsSql = itemsSql.Where(i => i.ClientID == id && i.DateOfAppointment >= DateTime.Now);
+
+
+            int pageSize = 10;
+            var items = await PaginatedList<MedicalAppointment>.CreateAsync(itemsSql, pageNumber ?? 1, pageSize);
+
+            return View(items);
+        }
+
+
         // GET: Clients
         public async Task<IActionResult> Index(string sort, string searchName, int? pageNumber)
         {

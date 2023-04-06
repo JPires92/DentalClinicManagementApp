@@ -1,0 +1,80 @@
+﻿@using DentalClinicManagementApp.Lib;
+@model PaginatedList<DentalClinicManagementApp.Models.MedicalAppointment>
+
+@{
+    ViewData["Title"] = "Index";
+
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    int pageNumber = Convert.ToInt32(ViewData["pageNumber"]);
+}
+
+<h3>@SharedLocalizer["History of medical appointments"]</h3>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               @Html.DisplayNameFor(model => model.First().ID)
+            </th>
+            <th>
+               @Html.DisplayNameFor(model => model.First().DateOfAppointment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().ClientID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Observations)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfAppointment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client!.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Observations)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li class="page-item @prevDisabled">
+            <a asp-action="HitoryAppointments" asp-route-id="@ViewData["ID"]" asp-route-pageNumber="@(Model.PageIndex - 1)" class="page-link">@SharedLocalizer["Previous"]</a>
+        </li>
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            @if (i == Model.PageIndex)
+            {
+                <li class="page-item active">
+                    <a asp-action="HitoryAppointments" asp-route-id="@ViewData["ID"]" asp-route-pageNumber="@i" class="page-link">@i</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a asp-action="HitoryAppointments" asp-route-id="@ViewData["ID"]" asp-route-pageNumber="@i" class="page-link">@i</a>
+                </li>
+            }
+
+        }
+
+        <li class="page-item @nextDisabled">
+            <a asp-action="HitoryAppointments" asp-route-id="@ViewData["ID"]" asp-route-pageNumber="@(Model.PageIndex + 1)" class="page-link">@SharedLocalizer["Next"]</a>
+        </li>
+    </ul>
+</nav>

@@ -66,6 +66,9 @@
                     @Html.DisplayFor(modelItem => item.HealthInsuranceCompany)
                 </td>
                 <td>
+                    <a asp-action="HitoryAppointmentsClient" asp-route-id="@item.ID">@SharedLocalizer["History of medical appointments"]</a> <span>|</span>
+                    <a asp-action="FutureAppointmentsClient" asp-route-id="@item.ID">@SharedLocalizer["Future medical appointments"]</a>
+                    <br />
                     <partial name="_CRUD_actions" model="item.ID" />
                 </td>
             </tr>
