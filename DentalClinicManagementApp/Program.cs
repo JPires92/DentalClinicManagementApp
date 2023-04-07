@@ -1,6 +1,7 @@
 using DentalClinicManagementApp;
 using DentalClinicManagementApp.Data;
 using DentalClinicManagementApp.Data.Seed;
+using DentalClinicManagementApp.Lib;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -54,7 +55,6 @@ builder.Services
 #endregion
 
 
-
 #region Login
 //IdentityUser: definição por omissão do ASP.net
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
@@ -71,6 +71,13 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 })
     .AddRoles<IdentityRole>() //Roles
     .AddEntityFrameworkStores<ApplicationDbContext>(); //onde guarda informações
+
+//Apply policies a group of users
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(AppConstants.APP_POLICY, policy => policy.RequireRole(AppConstants.APP_POLICY_ROLES));
+    options.AddPolicy(AppConstants.APP_ADMIN_POLICY, policy => policy.RequireRole(AppConstants.AAPP_ADMIN_POLICY_ROLES));
+});
 #endregion
 
 

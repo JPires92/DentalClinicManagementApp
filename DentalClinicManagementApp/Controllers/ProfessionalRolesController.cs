@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace DentalClinicManagementApp.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = AppConstants.APP_ADMIN_POLICY)]
     public class ProfessionalRolesController : Controller
     {
         private readonly ApplicationDbContext _context;

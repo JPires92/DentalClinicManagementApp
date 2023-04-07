@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using DentalClinicManagementApp.Lib;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -83,6 +84,10 @@ namespace DentalClinicManagementApp.Areas.Identity.Pages.Account
             [Display(Name = "Username")]
             public string UserName { get; set; }
 
+            [Required]
+            [Display(Name = "Role")]
+            public string Role { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -118,9 +123,12 @@ namespace DentalClinicManagementApp.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
+                //Add role by default
+                await _userManager.AddToRoleAsync(user, Input.Role);
 
                 if (result.Succeeded)
                 {

@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,29 +28,40 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@SharedLocalizer["Home"]</a>
                         </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ProfessionalRoles" asp-action="Index">@SharedLocalizer["Roles"]</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Specialities" asp-action="Index">@SharedLocalizer["Specialities"]</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="PostalCodes" asp-action="Index">@SharedLocalizer["Postal Codes"]</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Professionals" asp-action="Index">@SharedLocalizer["Professionals"]</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Clients" asp-action="Index">@SharedLocalizer["Clients"]</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="MedicalAppointments" asp-action="Index">@SharedLocalizer["Appointments"]</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Invoices" asp-action="Index">@SharedLocalizer["Invoices"]</a>
-                        </li>
+                    @if(SignInManager.IsSignedIn(User))
+                        {
+                            @if (User.IsInRole(AppConstants.ADMIN_ROLE))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ProfessionalRoles" asp-action="Index">@SharedLocalizer["Roles"]</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Specialities" asp-action="Index">@SharedLocalizer["Specialities"]</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="PostalCodes" asp-action="Index">@SharedLocalizer["Postal Codes"]</a>
+                                </li>
+                            }
 
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Professionals" asp-action="Index">@SharedLocalizer["Professionals"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Clients" asp-action="Index">@SharedLocalizer["Clients"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="MedicalAppointments" asp-action="Index">@SharedLocalizer["Appointments"]</a>
+                            </li>
+
+                            @if (User.IsInRole(AppConstants.ADMIN_ROLE))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Invoices" asp-action="Index">@SharedLocalizer["Invoices"]</a>
+                                </li>
+                            }
+
+
+                        } 
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">@SharedLocalizer["Privacy"]</a>
                         </li>

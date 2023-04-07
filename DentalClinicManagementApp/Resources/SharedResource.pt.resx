@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Account" xml:space="preserve">
+    <value>Conta</value>
+  </data>
   <data name="Actions" xml:space="preserve">
     <value>Ações</value>
   </data>
@@ -195,6 +198,9 @@
   <data name="Find by ZipCode or Location" xml:space="preserve">
     <value>Pesquisar por CP ou Localidade</value>
   </data>
+  <data name="Forgot your password?" xml:space="preserve">
+    <value>Esqueceu-se da password?</value>
+  </data>
   <data name="Future medical appointments" xml:space="preserve">
     <value>Consultas futuras</value>
   </data>
@@ -218,6 +224,9 @@
   </data>
   <data name="Location" xml:space="preserve">
     <value>Localidade</value>
+  </data>
+  <data name="Log in" xml:space="preserve">
+    <value>Entrar</value>
   </data>
   <data name="Medical Appointment" xml:space="preserve">
     <value>Consulta</value>
@@ -276,6 +285,12 @@
   <data name="Professionals" xml:space="preserve">
     <value>Profissionais</value>
   </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registo</value>
+  </data>
+  <data name="Register user" xml:space="preserve">
+    <value>Registo de utilizador</value>
+  </data>
   <data name="Return to Full List" xml:space="preserve">
     <value>Ver lista completa</value>
   </data>
@@ -293,6 +308,9 @@
   </data>
   <data name="Select the year" xml:space="preserve">
     <value>Selecione o ano</value>
+  </data>
+  <data name="Set password" xml:space="preserve">
+    <value>Alterar pass</value>
   </data>
   <data name="Specialities" xml:space="preserve">
     <value>Especialidades</value>

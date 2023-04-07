@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace DentalClinicManagementApp.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = AppConstants.APP_POLICY)]
     public class ClientsController : Controller
     {
         private readonly ApplicationDbContext _context;
