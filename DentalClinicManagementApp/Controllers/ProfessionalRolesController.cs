@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using DentalClinicManagementApp.Data;
 using DentalClinicManagementApp.Models;
 using DentalClinicManagementApp.Lib;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DentalClinicManagementApp.Controllers
 {
+    [Authorize]
     public class ProfessionalRolesController : Controller
     {
         private readonly ApplicationDbContext _context;

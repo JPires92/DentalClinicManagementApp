@@ -10,9 +10,11 @@ using DentalClinicManagementApp.Models;
 using Microsoft.AspNetCore.Mvc.Localization;
 using NToastNotify;
 using DentalClinicManagementApp.Lib;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DentalClinicManagementApp.Controllers
 {
+    [Authorize]
     public class PostalCodesController : Controller
     {
         private readonly ApplicationDbContext _context;

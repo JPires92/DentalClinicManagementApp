@@ -1,5 +1,6 @@
 using DentalClinicManagementApp;
 using DentalClinicManagementApp.Data;
+using DentalClinicManagementApp.Data.Seed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -45,7 +46,7 @@ builder.Services
         options.DataAnnotationLocalizerProvider = (type, factory) =>
             factory.Create(typeof(SharedResource));
     })
-    .AddNToastNotifyToastr(new NToastNotify.ToastrOptions //NToastNotify - notificações
+    .AddNToastNotifyToastr(new NToastNotify.ToastrOptions //NToastNotify - notificaï¿½ï¿½es
     {
         ProgressBar = true,
         TimeOut = 3000
@@ -53,8 +54,26 @@ builder.Services
 #endregion
 
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+#region Login
+//IdentityUser: definiÃ§Ã£o por omissÃ£o do ASP.net
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    //Confirm signin account
+    options.SignIn.RequireConfirmedAccount = true;
+
+    //Password
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequiredLength = 4;
+})
+    .AddRoles<IdentityRole>() //Roles
+    .AddEntityFrameworkStores<ApplicationDbContext>(); //onde guarda informaÃ§Ãµes
+#endregion
+
+
 builder.Services.AddControllersWithViews();
 
 
@@ -79,7 +98,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-//Forçar a utilizar localização definida por nós
+//Forï¿½ar a utilizar localizaï¿½ï¿½o definida por nï¿½s
 app.UseRequestLocalization(
     app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value
 );
@@ -92,4 +111,30 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+Seed();
+
 app.Run();
+
+
+#region SeedDatabaseWithUsers
+//Fill a default user admin and worker
+void Seed()
+{
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+
+
+    try
+    {
+        var dbContext = services.GetRequiredService<ApplicationDbContext>();
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        SeedDatabase.Seed(dbContext, userManager, roleManager);
+    }
+    catch (Exception ex)
+    {
+
+    }
+}
+#endregion
