@@ -38,9 +38,24 @@ This application was developed as part of a 100H Full Stack Developer training. 
 
 **4.4. Indicate the amount received per month.**
 
-## Run application
+## Entity-Relationship Diagram of the application
+![DentalClinicManagementApp_DER](https://github.com/user-attachments/assets/7472ef2e-44a5-4509-9c91-d9ae78824320)
+
+## Run the application
+This .NET application uses Entity Framework to generate the database schema.
+For this, run the code below in the 'Package Manager Console'
 ### Using the Visual Studio
 ```properties 
 Add-Migration InitialMigration
 Update-Database
 ```
+After that, you need to update the database connection string on the `appsettings.json` file.
+
+When running the application, default users are created using seeds to use the application.
+
+### Users created by seeds
+| Username   |   Password   |
+| :---       |       ---:   |
+| admin      | admin2023    |
+| worker     | worker2023   |
+
